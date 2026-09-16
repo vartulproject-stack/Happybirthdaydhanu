@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cute Birthday Surprise! 🎀</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Short+Stack&display=swap');
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle, #fff0f6 0%, #ffdeeb 50%, #d8f3dc 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Short Stack', cursive;
+      overflow-x: hidden;
+      user-select: none;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+    }
+
+    /* LAYER 1: Background Confetti Canvas */
+    #confetti-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .cloud {
+      position: fixed;
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 50px;
+      opacity: 0.8;
+      animation: floatCloud 20s linear infinite;
+      z-index: 0;
+    }
+    .cloud::before, .cloud::after {
+      content: '';
+      position: absolute;
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 50%;
+    }
+    .cloud1 { width: 120px; height: 40px; top: 10%; left: -150px; }
+    .cloud1::before { width: 50px; height: 50px; top: -20px; left: 20px; }
+    .cloud1::after { width: 40px; height: 40px; top: -15px; left: 60px; }
+
+    @keyframes floatCloud {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(110vw); }
+    }
+
+    /* Title Box */
+    .title-box {
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.85);
+      padding: 12px 25px;
+      border-radius: 30px;
+      border: 3px dashed #ff85a1;
+      box-shadow: 0 10px 25px rgba(255, 133, 161, 0.2);
+      margin-bottom: 15px;
+      animation: wiggle 3s ease-in-out infinite;
+    }
+
+    h1 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 2.2rem;
+      color: #ff477e;
+      text-shadow: 2px 2px 0px #fff, 4px 4px 0px #ff9ebb;
+    }
+
+    /* Bubu Dudu GIF Layer */
+    .gif-container {
+      z-index: 10;
+      margin-bottom: 15px;
+      animation: floatGif 2s ease-in-out infinite alternate;
+    }
+
+    .gif-container img {
+      width: 140px;
+      height: 140px;
+      object-fit: contain;
+      filter: drop-shadow(0px 8px 15px rgba(255, 133, 161, 0.3));
+    }
+
+    @keyframes floatGif {
+      0% { transform: translateY(0px); }
+      100% { transform: translateY(-10px); }
+    }
+
+    /* LAYER 2: Photo Cards */
+    .photo-area {
+      display: flex;
+      gap: 25px;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      z-index: 10;
+      margin-bottom: 15px;
+    }
+
+    .cute-card {
+      background: #ffffff;
+      padding: 12px 12px 18px 12px;
+      border-radius: 25px;
+      border: 4px solid #ffc6ff;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+      position: relative;
+      width: 220px;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .cute-card:hover {
+      transform: scale(1.08) rotate(3deg);
+      border-color: #ff70a6;
+    }
+
+    .cute-card.now:hover {
+      transform: scale(1.08) rotate(-3deg);
+    }
+
+    .badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #ff9eaa;
+      color: white;
+      padding: 4px 15px;
+      border-radius: 15px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .cute-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 18px;
+      margin-top: 5px;
+    }
+
+    .caption {
+      margin-top: 8px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #ff477e;
+    }
+
+    .hint-text {
+      z-index: 10;
+      background: #ffffff;
+      color: #ff477e;
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-size: 0.95rem;
+      font-weight: bold;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      animation: pulse 1.5s infinite;
+    }
+
+    /* Tap Burst Animation */
+    .pop-emoji {
+      position: fixed;
+      font-size: 45px;
+      pointer-events: none;
+      animation: popUp 1s ease-out forwards;
+      z-index: 1000;
+    }
+
+    @keyframes popUp {
+      0% { transform: scale(0) rotate(0deg); opacity: 1; }
+      50% { transform: scale(1.6) rotate(180deg); }
+      100% { transform: scale(1) translateY(-80px) rotate(360deg); opacity: 0; }
+    }
+
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(-2deg); }
+      50% { transform: rotate(2deg); }
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="confetti-canvas"></canvas>
+  <div class="cloud cloud1"></div>
+
+  <div class="title-box">
+    <h1>🌸 Happy 2nd Birthday! 🌸</h1>
+  </div>
+
+  <div class="gif-container">
+    <img src="bubu_dudu.gif" alt="Bubu Dudu Birthday" onerror="this.src='https://media.tenor.com/tE99m19g-1AAAAAC/bubu-dudu-happy-birthday.gif'">
+  </div>
+
+  <div class="photo-area">
+    <div class="cute-card">
+      <div class="badge">🎀 Day 1</div>
+      <img src="birth.jpg" alt="Baby Photo" onerror="this.src='https://images.unsplash.com/photo-1519689680058-324335c77eba?w=400'">
+      <div class="caption">Little Baby 👶</div>
+    </div>
+
+    <div class="cute-card now">
+      <div class="badge">👑 Today</div>
+      <img src="today.jpg" alt="2 Years Photo" onerror="this.src='https://images.unsplash.com/photo-1543332164-6e82f355badc?w=400'">
+      <div class="caption">Big Girl Now 👧</div>
+    </div>
+  </div>
+
+  <div class="hint-text">✨ Touch Screen for Music & Magic! 🎶</div>
+
+  <script>
+    const CUTE_EMOJIS = ['🎀', '🦄', '🐣', '🐰', '⭐', '🎈', '🍭', '🍓', '👑', '💖'];
+    let musicStarted = false;
+    let audioCtx;
+
+    // Confetti System
+    const canvas = document.getElementById('confetti-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const confettiPieces = Array.from({ length: 40 }).map(() => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height - canvas.height,
+      color: ['#ff70a6', '#ffb400', '#00b4d8', '#9b5de5', '#00f5d4'][Math.floor(Math.random() * 5)],
+      size: Math.random() * 8 + 4,
+      speed: Math.random() * 2 + 1,
+      angle: Math.random() * 360
+    }));
+
+    function drawConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      confettiPieces.forEach(p => {
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+        p.y += p.speed;
+        p.angle += 0.05;
+        p.x += Math.sin(p.angle);
+        if (p.y > canvas.height) p.y = -10;
+      });
+      requestAnimationFrame(drawConfetti);
+    }
+    drawConfetti();
+
+    // Tap Events
+    window.addEventListener('click', (e) => {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+
+      if (!musicStarted) {
+        startBackgroundTune();
+        musicStarted = true;
+      }
+
+      playPopSound();
+
+      const pop = document.createElement('div');
+      pop.className = 'pop-emoji';
+      pop.style.left = (e.clientX - 20) + 'px';
+      pop.style.top = (e.clientY - 20) + 'px';
+      
+      const randomItem = CUTE_EMOJIS[Math.floor(Math.random() * CUTE_EMOJIS.length)];
+      pop.innerText = randomItem;
+
+      document.body.appendChild(pop);
+      setTimeout(() => pop.remove(), 1000);
+    });
+
+    function playPopSound() {
+      if (!audioCtx) return;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(800 + Math.random() * 300, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.1);
+    }
+
+    function startBackgroundTune() {
+      const notes = [
+        {f: 261.63, d: 0.3}, {f: 261.63, d: 0.3}, {f: 293.66, d: 0.6}, {f: 261.63, d: 0.6}, {f: 349.23, d: 0.6}, {f: 329.63, d: 1.0},
+        {f: 261.63, d: 0.3}, {f: 261.63, d: 0.3}, {f: 293.66, d: 0.6}, {f: 261.63, d: 0.6}, {f: 392.00, d: 0.6}, {f: 349.23, d: 1.0}
+      ];
+
+      function playSequence() {
+        let currentTime = audioCtx.currentTime;
+
+        notes.forEach((note) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(note.f, currentTime);
+
+          gain.gain.setValueAtTime(0.12, currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, currentTime + note.d - 0.05);
+
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+
+          osc.start(currentTime);
+          osc.stop(currentTime + note.d);
+
+          currentTime += note.d;
+        });
+
+        setTimeout(playSequence, (currentTime - audioCtx.currentTime) * 1000 + 500);
+      }
+
+      playSequence();
+    }
+  </script>
+</body>
+</html>
